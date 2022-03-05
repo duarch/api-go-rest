@@ -1,7 +1,7 @@
 package main
 
 import (
-	d "github.com/duarch/go-rest-api/database"
+	"github.com/duarch/go-rest-api/database"
 	m "github.com/duarch/go-rest-api/models"
 	r "github.com/duarch/go-rest-api/routes"
 )
@@ -11,8 +11,7 @@ func main() {
 		{Id: 1, Nome: "Darth Vader", Historia: "O senhor dos Sith"},
 		{Id: 2, Nome: "Obi-Wan Kenobi", Historia: "O mais poderoso Jedi"},
 	}
-
-	d.ConectaComBancoDeDados()
+	database.ConectaComBancoDeDados()
 	println("Iniciando servidor rest com Go...")
 	r.HandleRequests()
 }

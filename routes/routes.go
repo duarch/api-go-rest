@@ -13,5 +13,5 @@ func HandleRequests() {
 	r.HandleFunc("/", c.Home)
 	r.HandleFunc("/api/personalidades", c.TodasPersonalidades).Methods("GET")
 	r.HandleFunc("/api/personalidades/{id}", c.Retornaumapersonalidade).Methods("GET")
-	log.Fatal(http.ListenAndServe(":8081", r))
+	log.Fatal(http.ListenAndServe(":8000", r))
 }
