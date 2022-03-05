@@ -5,10 +5,13 @@ import (
 	"net/http"
 
 	c "github.com/duarch/go-rest-api/controllers"
+	"github.com/gorilla/mux"
 )
 
 func HandleRequests() {
-	http.HandleFunc("/", c.Home)
-	http.HandleFunc("/api/personalidades", c.TodasPersonalidades)
-	log.Fatal(http.ListenAndServe(":8081", nil))
+	r := mux.NewRouter()
+	r.HandleFunc("/", c.Home)
+	r.HandleFunc("/api/personalidades", c.TodasPersonalidades).Methods("GET")
+	r.HandleFunc("/api/personalidades/{id}", c.Retornaumapersonalidade).Methods("GET")
+	log.Fatal(http.ListenAndServe(":8081", r))
 }
