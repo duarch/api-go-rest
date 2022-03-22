@@ -4,28 +4,41 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
 
-	m "github.com/duarch/go-rest-api/models"
+	"github.com/duarch/go-rest-api/database"
+	"github.com/duarch/go-rest-api/models"
 	"github.com/gorilla/mux"
 )
 
 func Home(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Home Page")
+	fmt.Fprint(w, "Home Page")
 }
 
 func TodasPersonalidades(w http.ResponseWriter, r *http.Request) {
-	json.NewEncoder(w).Encode(m.Personalidades)
+	var p []models.Personalidade
+	database.DB.Find(&p)
+	json.NewEncoder(w).Encode(p)
 }
 
-func Retornaumapersonalidade(w http.ResponseWriter, r *http.Request) {
+func RetornaUmaPersonalidade(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
+	var personalidade models.Personalidade
+	database.DB.First(&personalidade, id)
+	json.NewEncoder(w).Encode(personalidade)
+}
 
-	for _, item := range m.Personalidades {
-		if strconv.Itoa(item.Id) == id {
-			json.NewEncoder(w).Encode(item)
-		}
-	}
+func CriaUmaNovaPersonalidade(w http.ResponseWriter, r *http.Request) {
+	var novapersonalidade models.Personalidade
+	_ = json.NewDecoder(r.Body).Decode(&novapersonalidade)
+	database.DB.Create(&novapersonalidade)
+	json.NewEncoder(w).Encode(novapersonalidade)
+}
 
+func DeletaUmaPersonalidade(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+	var personalidade models.Personalidade
+	database.DB.Delete(&personalidade, id)
+	json.NewEncoder(w).Encode(personalidade)
 }
